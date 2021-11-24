@@ -1,7 +1,7 @@
 var mongoose = require('mongoose');
 const { Schema } = mongoose;
 
-const ItemSchema = new Schema({
+const FilmSchema = new Schema({
   name: { 
     type: String, 
     required: true, 
@@ -15,11 +15,15 @@ const ItemSchema = new Schema({
     minlength: 1, 
     maxlength: 500 
   },
-  category: { 
-    type: Schema.Types.ObjectId, 
-    ref: 'Category', 
-    required: true 
+  year: {
+    type: Number,
+    required: true,
+    min: 1880,
   },
+  genre: [{ 
+    type: Schema.Types.ObjectId, 
+    ref: 'Genre' 
+  }],
   price: { 
     type: Number, 
     min: 0, 
@@ -35,18 +39,18 @@ const ItemSchema = new Schema({
   }
 });
 
-ItemSchema
+FilmSchema
   .virtual('url')
   .get(function() {
     return `/item/${this._id}`;
   });
 
-ItemSchema
+FilmSchema
   .virtual('price_pounds')
   .get(function() {
     const pound = this.price / 100;
     return pound.toLocaleString("en-GB", { style: "currency", currency: "GBP" });
   })
 
-module.exports = mongoose.model('Item', ItemSchema);
+module.exports = mongoose.model('Film', FilmSchema);
 
