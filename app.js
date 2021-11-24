@@ -38,4 +38,7 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
+// CONTINUE FROM https://developer.mozilla.org/en-US/docs/Learn/Server-side/Express_Nodejs/mongoose#installing_mongoose_and_mongodb
+// To make schemas and models
+
 module.exports = app;
