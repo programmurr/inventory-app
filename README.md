@@ -19,3 +19,7 @@
 ## Status
 
 In progress. View my code here until it is ready for deployment.
+
+### Content
+
+Seeded category and item descriptions in populateDB.js can be found on [Wikipedia](https://www.wikipedia.org/);
