@@ -1,7 +1,15 @@
 doctype html
-html
+html(lang="en")
   head
-    title= title
+    meta(charset="UTF-8")
+    meta(http-equiv="X-UA-Compatible", content="IE=edge")
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
     link(rel='stylesheet', href='/stylesheets/style.css')
-  body
-    block content
+    title= title
+  body 
+    .content 
+      .nav-links 
+        nav 
+          a(href="/genre/create") Create a Genre 
+          a(href="/film/create") Create a film  
+      block content

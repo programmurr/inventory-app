@@ -42,7 +42,7 @@ const FilmSchema = new Schema({
 FilmSchema
   .virtual('url')
   .get(function() {
-    return `/item/${this._id}`;
+    return `/film/${this._id}`;
   });
 
 FilmSchema
