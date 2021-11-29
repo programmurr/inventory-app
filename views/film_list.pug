@@ -1,0 +1,17 @@
+extends layout 
+
+block content 
+  h1= page 
+
+  p Lookit the list of all the films below.
+
+  ul.film-list 
+    each film in filmList 
+      li.film-item 
+        img(src="", alt=film.name + " image")
+        a(href=film.url) #{film.name} 
+        p Price: #{film.pricePounds}
+        p Quantity in stock: #{film.quantity}
+    
+    else 
+      p There are no films

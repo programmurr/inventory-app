@@ -1,21 +1,21 @@
 extends layout
 
 block content
-  h1= title
-  p Welcome to #{title}
+  h1= page
+  p Welcome to #{page}.
 
 
   p Back afore'n internet days, us old folks watched Netflixers (we called em films back'en) on these DVDs ye see here. 
   p Lookit our stock o genres an' films below, then click aroun an' see what we got'n store for ye.
   
   .genre-links 
-  p. 
-    Lookit detailed genre information #[a(href="/genres") heere]. 
-  each genre in genres 
-    a(href="/genre/" + genre._id) #{genre.name} 
-
-  .stock-count
     p. 
-      Lookit a list of all our DVDs #[a(href="/films") heere]. 
-    p Films in stock: #{film_count}
+      Lookit detailed genre information #[a(href="/genres") heere]. 
+    each genre in genres 
+      a(href="/genre/" + genre._id) #{genre.name} 
+
+    .stock-count
+      p. 
+        Lookit a list of all our DVDs #[a(href="/films") heere]. 
+      p Films in stock: #{filmCount}
 

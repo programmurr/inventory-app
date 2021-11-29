@@ -46,7 +46,7 @@ FilmSchema
   });
 
 FilmSchema
-  .virtual('price_pounds')
+  .virtual('pricePounds')
   .get(function() {
     const pound = this.price / 100;
     return pound.toLocaleString("en-GB", { style: "currency", currency: "GBP" });

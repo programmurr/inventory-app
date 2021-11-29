@@ -1,0 +1,24 @@
+extends layout 
+
+block content 
+  h1= page 
+
+  .film-info 
+    img(src="", alt=film.name + " image")
+    p= film.description
+    p Release Year: #{film.year}
+    p Price: #{film.pricePounds}
+    p Quantity in Stock: #{film.quantity}
+
+    .genres
+      h4 Genres
+      each genre in film.genre
+        a(href=genre.url) #{genre.name} 
+      
+      else 
+        p Film does not belong to a Genre.
+
+  .edit-film 
+    a(href=film.url + "/update") Update Film Info
+    a(href=film.url + "/delete") Delete Film 
+

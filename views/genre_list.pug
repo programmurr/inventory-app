@@ -1,0 +1,16 @@
+extends layout 
+
+block content 
+  h1= page 
+
+  p Lookit the list of all d'genres below.
+
+  div.genre-list
+    dl 
+      each genre in genreList 
+        dt 
+          a(href=genre.url) #{genre.name}
+          dd #{genre.description}
+      
+      else 
+        p This genre has no films 
