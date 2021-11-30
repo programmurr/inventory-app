@@ -4,5 +4,76 @@ body {
 }
 
 a {
-  color: #00B7FF;
+  color: #00b7ff;
+}
+
+nav {
+  width: 300px;
+  display: flex;
+  justify-content: space-between;
+}
+
+button {
+  cursor: pointer;
+}
+
+footer {
+  margin-top: 20px;
+}
+
+.film-submit,
+.genre-submit {
+  height: 350px;
+  max-height: 500px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.genre-submit {
+  height: 250px;
+  justify-content: start;
+}
+
+.genre-submit > * {
+  margin-top: 10px;
+}
+
+.genre-select {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.genre-links {
+  width: 450px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.genres > h4 {
+  margin: 0;
+}
+
+.film-genre {
+  margin-right: 20px;
+}
+
+.edit-film {
+  margin-top: 10px;
+  width: 200px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.film-number {
+  width: 50%;
+}
+
+.film-links {
+  margin-top: 20px;
+}
+
+.error {
+  color: rgb(226, 0, 0);
 }

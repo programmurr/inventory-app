@@ -1,0 +1,19 @@
+extends layout 
+
+block content 
+  h1= page 
+
+  form.genre-submit(action="", method="post") 
+    label(for="name") Name: 
+    input#name(type="text", name="name" placeholder="Sci Fi, Drama, etc." value=(undefined===genre ? "" : genre.name))
+    label(for="description") Description: 
+    textarea#description(name="description" placeholder="Drama films are a genre in which..." value=(undefined===genre ? "" : genre.description))
+    button(type="submit") Submit
+
+  .genre-links 
+    a(href="/genres") All Genres 
+  
+  if errors 
+    ul 
+      for error in errors 
+        li.error!=error.msg

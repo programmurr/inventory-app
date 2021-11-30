@@ -13,7 +13,7 @@ block content
     .genres
       h4 Genres
       each genre in film.genre
-        a(href=genre.url) #{genre.name} 
+        a.film-genre(href=genre.url) #{genre.name} 
       
       else 
         p Film does not belong to a Genre.
