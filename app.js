@@ -7,8 +7,7 @@ require('dotenv').config();
 
 // TODO: 
 // Implement DELETE and UPDATE routes for film and genre.
-// Fix bug that doesn't parse escaped characters from text input i.e. check out the
-// Horror genre detail. The ' is escaped during validation and hasn't been parsed back.
+// Decode HTML entities https://stackoverflow.com/a/34064434
 
 var indexRouter = require('./routes/index');
 
