@@ -58,12 +58,39 @@ exports.genre_create_post = [
   }
 ]
 
-exports.genre_delete_get = function(req, res, next) {
+exports.genre_delete_get = async function(req, res, next) {
+  try {
+    const genre = Genre.findById(req.params.id);
+    const genreFilms = Film.find({ 'genre': req.params.id }).sort({ name: 1 }).populate('genre');
+    const results = await Promise.all([genre.exec(), genreFilms.exec()]);
+    if (results[0] == null) {
+      res.redirect('/genres');
+    }
+    res.render('genre_delete', { page: 'Delete Genre', genre: results[0], genreFilms: results[1] });
+  } catch (error) {
+    return next(error);
+  }
   res.send('NOT IMPLEMENTED YET: genre_delete_get ' + req.params.id);
 }
 
-exports.genre_delete_post = function(req, res, next) {
-  res.send('NOT IMPLEMENTED YET: genre_delete_post ' + req.params.id);
+exports.genre_delete_post = async function(req, res, next) {
+  try {
+    const genre = Genre.findById(req.body.genreid);
+    const genreFilms = Film.find({ 'genre': req.body.genreid });
+    const results = await Promise.all([genre.exec(), genreFilms.exec()]);
+    if (results[1] > 0) {
+      res.render('genre_delete', { page: 'Delete Genre', genre: results[0], genreFilms: results[1] })
+    } else {
+      try {
+        await Genre.findByIdAndRemove(req.body.genreid).exec();
+        res.redirect('/genres');
+      } catch (error) {
+        return next(error);
+      }
+    }
+  } catch (error) {
+    return next(error);
+  }
 }
 
 exports.genre_update_get = function(req, res, next) {

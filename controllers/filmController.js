@@ -71,15 +71,27 @@ exports.film_create_post = [
       }
     }
   }
-
 ]
 
-exports.film_delete_get = function(req, res, next) {
-  res.send('NOT IMPLEMENTED YET: film_delete_get ' + req.params.id);
+exports.film_delete_get = async function(req, res, next) {
+  try {
+    const film = await Film.findById(req.params.id).populate('genre').exec();
+    if (film == null) {
+      res.redirect('/films');
+    }
+    res.render('film_delete', { page: 'Delete Film', film });
+  } catch (error) {
+    return next(error);
+  }
 }
 
-exports.film_delete_post = function(req, res, next) {
-  res.send('NOT IMPLEMENTED YET: film_delete_post ' + req.params.id);
+exports.film_delete_post = async function(req, res, next) {
+  try {
+    await Film.findByIdAndRemove(req.body.filmid).exec();
+    res.redirect('/films');
+  } catch (error) {
+    return next(error);
+  }
 }
 
 exports.film_update_get = function(req, res, next) {

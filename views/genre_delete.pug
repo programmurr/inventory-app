@@ -1,0 +1,26 @@
+extends layout 
+
+block content 
+  h1 #{page}: #{genre.name}
+
+  if genreFilms.length 
+
+    p #[strong Delete the following films before attempting to delete this genre.]
+
+    .delete-genre-list 
+
+      h4 Films 
+
+      dl 
+        each film in genreFilms 
+          dt 
+            a(href=film.url) #{film.name}
+          dd #{film.description}
+  else 
+    p Do you really want to delete this Genre?
+
+    form(action="", method="post") 
+      .delete-genre-form 
+        input#delete-genre(type="hidden" name="genreid" required="true" value=genre._id)
+
+      button.delete-button(type="submit") Delete

@@ -1,0 +1,15 @@
+extends layout 
+
+block content 
+  h1 #{page}: #{film.name}
+  p #{film.year} 
+  each genre in film.genre 
+    p #{genre.name}
+
+  p Do you really want to delete this film?
+
+  form(action="", method="post") 
+    .delete-film
+      input#filmid(type="hidden" name="filmid" required="true" value=film._id)
+    
+    button.delete-film-button(type="submit") Delete
