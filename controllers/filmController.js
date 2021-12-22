@@ -2,13 +2,15 @@ var Genre = require('../models/genre');
 var Film = require('../models/film');
 
 const { body, validationResult } = require('express-validator');
+var debug = require('debug')('film');
 
 exports.film_create_get = async function(req, res, next) {
   try {
     const genres = await Genre.find().sort({ name: 1 }).exec();
     res.render('film_form', { page: 'Create a Film', genres})
-  } catch (err) {
-    return next(err);
+  } catch (error) {
+    debug('film create/get error: ' + error);
+    return next(error);
   }
 }
 
@@ -54,8 +56,9 @@ exports.film_create_post = [
           }
         })
         res.render('film_form', { page: 'Create a Film', film: newFilm, errors: errors.array(), genres})
-      } catch (err) {
-        return next(err);
+      } catch (error) {
+        debug('film create/post error: ' + error);
+        return next(error);
       }
     } else {
       try {
@@ -66,8 +69,9 @@ exports.film_create_post = [
           await newFilm.save();
           res.redirect(newFilm.url);
         }
-      } catch (err) {
-        return next(err);
+      } catch (error) {
+          debug('film create/post error: ' + error);
+        return next(error);
       }
     }
   }
@@ -81,6 +85,7 @@ exports.film_delete_get = async function(req, res, next) {
     }
     res.render('film_delete', { page: 'Delete Film', film });
   } catch (error) {
+    debug('film delete/get error: ' + error);
     return next(error);
   }
 }
@@ -90,6 +95,7 @@ exports.film_delete_post = async function(req, res, next) {
     await Film.findByIdAndRemove(req.body.filmid).exec();
     res.redirect('/films');
   } catch (error) {
+    debug('film delete/post error: ' + error);
     return next(error);
   }
 }
@@ -114,6 +120,7 @@ exports.film_update_get = async function(req, res, next) {
     });
     res.render('film_form', { title: 'Update Film', film, genres });
   } catch (error) {
+    debug('film update/get error: ' + error);
     return next(error);
   }
 }
@@ -162,6 +169,7 @@ exports.film_update_post = [
         });
         res.render('film_form', { page: 'Update Film', genres, film: newFilm, errors: errors.array() });
       } catch (error) {
+          debug('film update/post error: ' + error);
         return next(error);
       }
     } else {
@@ -169,6 +177,7 @@ exports.film_update_post = [
         await Film.findByIdAndUpdate(req.params.id, newFilm, {}).exec();
         res.redirect(newFilm.url);
       } catch (error) {
+        debug('film update/post error: ' + error);
         return next(error);
       }
     }
@@ -184,8 +193,9 @@ exports.film_detail = async function(req, res, next) {
       return next(err);
     }
     res.render('film_detail', { page: film.name, film });
-  } catch (err) {
-    return next(err);
+  } catch (error) {
+    debug('film detail error: ' + error);
+    return next(error);
   }
 }
 
@@ -193,7 +203,8 @@ exports.film_list = async function(req, res, next) {
   try {
     const films = await Film.find().sort({ name: 1 }).populate('genre').exec();
     res.render('film_list', { page: 'All Films', filmList: films });
-  } catch (err) {
-    return next(err);
+  } catch (error) {
+    debug('film list error: ' + error);
+    return next(error);
   }
 }

@@ -2,6 +2,7 @@ var Genre = require('../models/genre');
 var Film = require('../models/film');
 
 const { body, validationResult } = require('express-validator');
+var debug = require('debug')('genre');
 
 exports.index = async function(req, res, next) {
   try {
@@ -15,6 +16,7 @@ exports.index = async function(req, res, next) {
       filmCount: results[1]
     })
   } catch (err) {
+    debug('index error: ' + err);
     return next(err);
   }
 };
@@ -51,8 +53,9 @@ exports.genre_create_post = [
           await newGenre.save();
           res.redirect(newGenre.url);
         }
-      } catch (err) {
-        return next(err);
+      } catch (error) {
+        debug('genre create/post error: ' + error);
+        return next(error);
       }
     }
   }
@@ -68,6 +71,7 @@ exports.genre_delete_get = async function(req, res, next) {
     }
     res.render('genre_delete', { page: 'Delete Genre', genre: results[0], genreFilms: results[1] });
   } catch (error) {
+    debug('genre delete/get error: ' + error);
     return next(error);
   }
   res.send('NOT IMPLEMENTED YET: genre_delete_get ' + req.params.id);
@@ -85,10 +89,12 @@ exports.genre_delete_post = async function(req, res, next) {
         await Genre.findByIdAndRemove(req.body.genreid).exec();
         res.redirect('/genres');
       } catch (error) {
+        debug('genre delete/post error: ' + error);
         return next(error);
       }
     }
   } catch (error) {
+    debug('genre delete/post error: ' + error);
     return next(error);
   }
 }
@@ -103,6 +109,7 @@ exports.genre_update_get = async function(req, res, next) {
     }
     res.render('genre_form', { page: 'Update Genre', genre });
   } catch (error) {
+    debug('genre update/get error: ' + err);
     return next(error);
   }
 }
@@ -131,6 +138,7 @@ exports.genre_update_post = [
         await Genre.findByIdAndUpdate(req.params.id, updatedGenre, {}).exec();
         res.redirect(updatedGenre.url);
       } catch (error) {
+        debug('genre update/post error: ' + error);
         return next(error);
       }
     }
@@ -155,6 +163,7 @@ exports.genre_detail = async function(req, res, next) {
       films: results[1] 
     });
   } catch (err) {
+    debug('genre detail error: ' + err);
     return next(err);
   }
 }
@@ -164,6 +173,7 @@ exports.genre_list = async function(req, res, next) {
     const genres = await Genre.find().sort({ name: 1 }).exec();
     res.render('genre_list', { page: 'All Genres', genreList: genres });
   } catch (err) {
+    debug('genre list error: ' + err);
     return next(err);
   }
 }
