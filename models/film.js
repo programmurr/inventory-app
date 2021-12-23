@@ -15,6 +15,10 @@ const FilmSchema = new Schema({
     minlength: 1, 
     maxlength: 500 
   },
+  image: {
+    data: Buffer,
+    contentType: String
+  },
   year: {
     type: Number,
     required: true,
