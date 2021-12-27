@@ -38,20 +38,23 @@ exports.film_create_post = [
   body('quantity')
     .isInt({ min: 1 })
     .withMessage('Quantity must be an integer higher than one'),
-  check('name')
+  check('image')
     .custom((value, { req }) => {
-      if (req.file.size > 5000000) {
-        return false;
-      }
-      if (
-        req.file.mimetype === 'image/jpg'
-        || req.file.mimetype === 'image/jpeg'
-        || req.file.mimetype === 'image/png'
-        ) {
-          return true;
-        } else {
+      if (req.file) {
+        if (req.file.size > 5000000) {
           return false;
         }
+        if (
+          req.file.mimetype === 'image/jpg'
+          || req.file.mimetype === 'image/jpeg'
+          || req.file.mimetype === 'image/png'
+          ) {
+            return true;
+          } else {
+            return false;
+          }
+      }
+      return true;
     })
     .withMessage('Please only submit jpg, jpeg or png images less than 5MB.'),
   async (req, res, next) => {
@@ -60,15 +63,19 @@ exports.film_create_post = [
     const newFilm = new Film({
       name,
       description,
-      image: {
-        data: req.file.buffer ? req.file.buffer : '',
-        contentType: req.file.mimetype ? req.file.mimetype : ''
-      },
       year, 
       genre, 
       price, 
       quantity
     });
+    if (req.file) {
+      const image = {};
+      image.data = req.file
+      image.contentType = req.file.mimetype;
+      newFilm.image = image;
+    } else {
+      newFilm.image = { data: '', contentType: '' };
+    }
     if (!errors.isEmpty()) {
       try {
         const genres = await Genre.find().sort({ name: 1 }).exec();
@@ -122,7 +129,7 @@ exports.film_update_get = async function(req, res, next) {
   try {
     const [film, genres] = await Promise.all([
       Film.findById(req.params.id).populate('genre').exec(),
-      Genre.find().exec()
+      Genre.find().sort({ name: 1 }).exec()
     ]);
     if (film == null) {
       const error = new Error('Film not found');
@@ -165,6 +172,25 @@ exports.film_update_post = [
   body('quantity')
     .isInt({ min: 1 })
     .withMessage('Quantity must be an integer higher than one'),
+  check('image')
+    .custom((value, { req }) => {
+      if (req.file) {
+        if (req.file.size > 5000000) {
+          return false;
+        }
+        if (
+          req.file.mimetype === 'image/jpg'
+          || req.file.mimetype === 'image/jpeg'
+          || req.file.mimetype === 'image/png'
+          ) {
+            return true;
+          } else {
+            return false;
+          }
+      }
+      return true;
+    })
+    .withMessage('Please only submit jpg, jpeg or png images less than 5MB.'),
   async (req, res, next) => {
     const { name, description, year, genre, price, quantity } = req.body;
     const errors = validationResult(req);
@@ -185,7 +211,7 @@ exports.film_update_post = [
     }
     if (!errors.isEmpty()) {
       try {
-        const genres = await Genre.find().exec();
+        const genres = await Genre.find().sort({ name: 1 }).exec();
         genres.forEach((gen) => {
           if (newFilm.genre.indexOf(gen._id) > -1) {
             genres.checked = 'true';
