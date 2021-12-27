@@ -1,7 +1,10 @@
 var Genre = require('../models/genre');
 var Film = require('../models/film');
 
-const { body, validationResult } = require('express-validator');
+const { body, check, validationResult } = require('express-validator');
+const multer = require('multer');
+const storage = multer.memoryStorage();
+const upload = multer({ storage });
 
 exports.film_create_get = async function(req, res, next) {
   try {
@@ -13,6 +16,7 @@ exports.film_create_get = async function(req, res, next) {
 }
 
 exports.film_create_post = [
+  upload.single('image'),
   body('name', 'Film name required')
     .trim()
     .isLength({ min: 1, max: 100 })
@@ -34,12 +38,32 @@ exports.film_create_post = [
   body('quantity')
     .isInt({ min: 1 })
     .withMessage('Quantity must be an integer higher than one'),
+  check('name')
+    .custom((value, { req }) => {
+      if (req.file.size > 5000000) {
+        return false;
+      }
+      if (
+        req.file.mimetype === 'image/jpg'
+        || req.file.mimetype === 'image/jpeg'
+        || req.file.mimetype === 'image/png'
+        ) {
+          return true;
+        } else {
+          return false;
+        }
+    })
+    .withMessage('Please only submit jpg, jpeg or png images less than 5MB.'),
   async (req, res, next) => {
     const { name, description, year, genre, price, quantity } = req.body;
     const errors = validationResult(req);
     const newFilm = new Film({
       name,
       description,
+      image: {
+        data: req.file.buffer,
+        contentType: req.file.mimetype
+      },
       year, 
       genre, 
       price, 
