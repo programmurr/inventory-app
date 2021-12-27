@@ -8,7 +8,7 @@ block content
     input.film-name(type="text" name="name" placeholder="Goodfellas" value=(undefined===film ? "" : film.name))
     label(for="description") Description: 
     textarea.film-description(name="description" placeholder="This biographical crime film...") #{undefined===film ? "" : film.description}
-    label(for="image") Upload a poster: 
+    label(for="image") Upload a poster (optional): 
     input(type="file" name="image")
     label(for="year") Release year: 
     input.film-number(type="number" name="year" value=(undefined===film ? 2021 : film.year))

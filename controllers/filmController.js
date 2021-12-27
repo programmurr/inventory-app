@@ -6,10 +6,28 @@ const multer = require('multer');
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
+const imageValidation = (value, { req }) => {
+  if (req.file) {
+    if (req.file.size > 5000000) {
+      return false;
+    }
+    if (
+      req.file.mimetype === 'image/jpg'
+      || req.file.mimetype === 'image/jpeg'
+      || req.file.mimetype === 'image/png'
+      ) {
+        return true;
+      } else {
+        return false;
+      }
+  }
+  return true;
+}
+
 exports.film_create_get = async function(req, res, next) {
   try {
     const genres = await Genre.find().sort({ name: 1 }).exec();
-    res.render('film_form', { page: 'Create a Film', genres})
+    res.render('film_form', { page: 'Create a Film', genres});
   } catch (err) {
     return next(err);
   }
@@ -39,23 +57,7 @@ exports.film_create_post = [
     .isInt({ min: 1 })
     .withMessage('Quantity must be an integer higher than one'),
   check('image')
-    .custom((value, { req }) => {
-      if (req.file) {
-        if (req.file.size > 5000000) {
-          return false;
-        }
-        if (
-          req.file.mimetype === 'image/jpg'
-          || req.file.mimetype === 'image/jpeg'
-          || req.file.mimetype === 'image/png'
-          ) {
-            return true;
-          } else {
-            return false;
-          }
-      }
-      return true;
-    })
+    .custom(imageValidation)
     .withMessage('Please only submit jpg, jpeg or png images less than 5MB.'),
   async (req, res, next) => {
     const { name, description, year, genre, price, quantity } = req.body;
@@ -173,23 +175,7 @@ exports.film_update_post = [
     .isInt({ min: 1 })
     .withMessage('Quantity must be an integer higher than one'),
   check('image')
-    .custom((value, { req }) => {
-      if (req.file) {
-        if (req.file.size > 5000000) {
-          return false;
-        }
-        if (
-          req.file.mimetype === 'image/jpg'
-          || req.file.mimetype === 'image/jpeg'
-          || req.file.mimetype === 'image/png'
-          ) {
-            return true;
-          } else {
-            return false;
-          }
-      }
-      return true;
-    })
+    .custom(imageValidation)
     .withMessage('Please only submit jpg, jpeg or png images less than 5MB.'),
   async (req, res, next) => {
     const { name, description, year, genre, price, quantity } = req.body;
