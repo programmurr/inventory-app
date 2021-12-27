@@ -6,7 +6,9 @@ var logger = require('morgan');
 require('dotenv').config();
 
 // TODO: 
-// Implement DELETE and UPDATE routes for film and genre.
+// Display images from DB
+// Display default image if no image
+// Add upload image option to film form (optional for user)
 // Decode HTML entities https://stackoverflow.com/a/34064434
 
 var indexRouter = require('./routes/index');

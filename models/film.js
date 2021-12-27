@@ -56,5 +56,12 @@ FilmSchema
     return pound.toLocaleString("en-GB", { style: "currency", currency: "GBP" });
   })
 
+FilmSchema
+  .virtual('poster')
+  .get(function() {
+    const base64 = Buffer.from(this.image.data).toString('base64'); 
+    return `data:${this.image.contentType};base64,${base64}`;
+  })
+
 module.exports = mongoose.model('Film', FilmSchema);
 
