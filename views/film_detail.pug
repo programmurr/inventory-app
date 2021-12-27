@@ -4,7 +4,13 @@ block content
   h1= page 
 
   .film-info 
-    img(src=film.poster, alt=film.name + " image")
+    .poster-container 
+    if film.image.contentType === ""
+      img.no-poster(src="/images/camera-outline.png" alt=film.name + " poster not uploaded")
+      p No poster uploaded.
+    else 
+      img(src=film.poster, alt=film.name + " image")
+
     p= film.description
     p Release Year: #{film.year}
     p Price: #{film.pricePounds}

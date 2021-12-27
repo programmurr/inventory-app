@@ -18,6 +18,11 @@ img {
   height: 300px;
 }
 
+.no-poster {
+  width: 50px;
+  height: 50px;
+}
+
 button {
   cursor: pointer;
 }
@@ -81,4 +86,16 @@ footer {
 
 .error {
   color: rgb(226, 0, 0);
+}
+
+.film-list,
+.genre-film-list {
+  list-style: none;
+}
+
+.separator {
+  border-bottom: 1px solid black;
+  padding-bottom: 10px;
+  margin-bottom: 10px;
+  width: 500px;
 }

@@ -8,12 +8,18 @@ block content
   
   .film-list 
     h4 Films 
-    ul
+    ul.genre-film-list
       each film in films 
         li.film-item 
-          img(src="", alt=film.name + " image")
-          p
-            a(href=film.url) #{film.name} 
+          if film.image.contentType === ""
+            a(href=film.url title=film.name)
+              img.no-poster(src="/images/camera-outline.png" alt=film.name + " poster not uploaded")
+            p No poster uploaded for 
+              a(href=film.url) #{film.name}
+          else 
+            a(href=film.url title=film.name)
+              img(src=film.poster, alt=film.name + " image")
+        .separator
       
       else 
         p Genre has no films.
