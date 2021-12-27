@@ -61,8 +61,8 @@ exports.film_create_post = [
       name,
       description,
       image: {
-        data: req.file.buffer,
-        contentType: req.file.mimetype
+        data: req.file.buffer ? req.file.buffer : '',
+        contentType: req.file.mimetype ? req.file.mimetype : ''
       },
       year, 
       genre, 
@@ -143,6 +143,7 @@ exports.film_update_get = async function(req, res, next) {
 }
 
 exports.film_update_post = [
+  upload.single('image'),
   body('name', 'Film name required')
   .trim()
   .isLength({ min: 1, max: 100 })
@@ -176,6 +177,12 @@ exports.film_update_post = [
       quantity,
       _id: req.params.id
     });
+    if (req.file) {
+      const image = {};
+      image.data = req.file.buffer;
+      image.contentType = req.file.mimetype;
+      newFilm.image = image;
+    }
     if (!errors.isEmpty()) {
       try {
         const genres = await Genre.find().exec();
