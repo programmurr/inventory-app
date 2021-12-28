@@ -4,7 +4,7 @@ block content
   h1 Genre: #{page}
 
   .genre-description 
-    p= genre.description
+    p= genre.escapedDescription
   
   .film-list 
     h4 Films 
@@ -12,13 +12,13 @@ block content
       each film in films 
         li.film-item 
           if film.image.contentType === ""
-            a(href=film.url title=film.name)
-              img.no-poster(src="/images/camera-outline.png" alt=film.name + " poster not uploaded")
+            a(href=film.url title=film.escapedName)
+              img.no-poster(src="/images/camera-outline.png" alt=film.escapedName + " poster not uploaded")
             p No poster uploaded for 
-              a(href=film.url) #{film.name}
+              a(href=film.url) #{film.escapedName}
           else 
-            a(href=film.url title=film.name)
-              img(src=film.poster, alt=film.name + " image")
+            a(href=film.url title=film.escapedName)
+              img(src=film.poster, alt=film.escapedName + " image")
         .separator
       
       else 

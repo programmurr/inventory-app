@@ -9,8 +9,8 @@ block content
     dl 
       each genre in genreList 
         dt 
-          a(href=genre.url) #{genre.name}
-          dd #{genre.description}
+          a(href=genre.url) #{genre.escapedName}
+          dd #{genre.escapedDescription}
       
       else 
         p This genre has no films 

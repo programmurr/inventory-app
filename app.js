@@ -6,8 +6,7 @@ var logger = require('morgan');
 require('dotenv').config();
 
 // TODO: 
-// Add upload image option to film form (optional for user)
-// Decode HTML entities https://stackoverflow.com/a/34064434
+// Decode HTML entities https://stackoverflow.codecode html entity javascriptm/a/34064434
 
 var indexRouter = require('./routes/index');
 

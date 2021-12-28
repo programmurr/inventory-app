@@ -226,7 +226,7 @@ exports.film_detail = async function(req, res, next) {
       err.status = 404;
       return next(err);
     }
-    res.render('film_detail', { page: film.name, film });
+    res.render('film_detail', { page: film.escapedName, film });
   } catch (err) {
     return next(err);
   }

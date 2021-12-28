@@ -6,12 +6,12 @@ block content
   .film-info 
     .poster-container 
     if film.image.contentType === ""
-      img.no-poster(src="/images/camera-outline.png" alt=film.name + " poster not uploaded")
+      img.no-poster(src="/images/camera-outline.png" alt=film.escapedName + " poster not uploaded")
       p No poster uploaded.
     else 
-      img(src=film.poster, alt=film.name + " image")
+      img(src=film.poster, alt=film.escapedName + " image")
 
-    p= film.description
+    p= film.escapedDescription
     p Release Year: #{film.year}
     p Price: #{film.pricePounds}
     p Quantity in Stock: #{film.quantity}
@@ -19,7 +19,7 @@ block content
     .genres
       h4 Genres
       each genre in film.genre
-        a.film-genre(href=genre.url) #{genre.name} 
+        a.film-genre(href=genre.url) #{genre.escapedName} 
       
       else 
         p Film does not belong to a Genre.
