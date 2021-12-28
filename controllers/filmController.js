@@ -73,7 +73,7 @@ exports.film_create_post = [
     });
     if (req.file) {
       const image = {};
-      image.data = req.file
+      image.data = req.file.buffer;
       image.contentType = req.file.mimetype;
       newFilm.image = image;
     } else {
