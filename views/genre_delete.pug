@@ -21,6 +21,11 @@ block content
 
     form(action="", method="post") 
       .delete-genre-form 
+        label(for="admin") Admin password: 
+        input.admin-pw(type="password" name="admin" value="")
         input#delete-genre(type="hidden" name="genreid" required="true" value=genre._id)
 
       button.delete-button(type="submit") Delete
+  
+  if error 
+    p.error= error

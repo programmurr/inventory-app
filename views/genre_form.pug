@@ -8,6 +8,8 @@ block content
     input#name(type="text", name="name" placeholder="Sci Fi, Drama, etc." value=(undefined===genre ? "" : genre.name))
     label(for="description") Description: 
     textarea#description(name="description" placeholder="Drama films are a genre in which...") #{undefined===genre ? "" : genre.description}
+    label(for="admin") Admin password: 
+    input.admin-pw(type="password" name="admin" value="")
     button(type="submit") Submit
 
   .genre-links 

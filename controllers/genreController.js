@@ -4,6 +4,13 @@ var Film = require('../models/film');
 const { body, validationResult } = require('express-validator');
 var debug = require('debug')('genre');
 
+const adminCheck = (value, { req }) => {
+  if (req.body.admin !== process.env.RUD_PW) {
+    return false;
+  }
+  return true;
+}
+
 exports.index = async function(req, res, next) {
   try {
     const genres = Genre.find().sort({ name: 1 });
@@ -35,6 +42,9 @@ exports.genre_create_post = [
     .isLength({ min: 1, max: 500 })
     .withMessage('Description must be between 1 and 500 characters')
     .escape(),
+  body('admin')
+    .custom(adminCheck)
+    .withMessage('Admin password must be correct for Write, Update or Delete operations'),
   async (req, res, next) => {
     const errors = validationResult(req);
     const newGenre = new Genre({
@@ -63,13 +73,14 @@ exports.genre_create_post = [
 
 exports.genre_delete_get = async function(req, res, next) {
   try {
-    const genre = Genre.findById(req.params.id);
-    const genreFilms = Film.find({ 'genre': req.params.id }).sort({ name: 1 }).populate('genre');
-    const results = await Promise.all([genre.exec(), genreFilms.exec()]);
-    if (results[0] == null) {
+    const [genre, genreFilms] = await Promise.all([
+      Genre.findById(req.params.id).exec(), 
+      Film.find({ 'genre': req.body.genreid }).exec()
+    ]);
+    if (genre == null) {
       res.redirect('/genres');
     }
-    res.render('genre_delete', { page: 'Delete Genre', genre: results[0], genreFilms: results[1] });
+    res.render('genre_delete', { page: 'Delete Genre', genre, genreFilms });
   } catch (error) {
     debug('genre delete/get error: ' + error);
     return next(error);
@@ -79,11 +90,15 @@ exports.genre_delete_get = async function(req, res, next) {
 
 exports.genre_delete_post = async function(req, res, next) {
   try {
-    const genre = Genre.findById(req.body.genreid);
-    const genreFilms = Film.find({ 'genre': req.body.genreid });
-    const results = await Promise.all([genre.exec(), genreFilms.exec()]);
-    if (results[1] > 0) {
-      res.render('genre_delete', { page: 'Delete Genre', genre: results[0], genreFilms: results[1] })
+    const [genre, genreFilms] = await Promise.all([
+      Genre.findById(req.body.genreid).exec(), 
+      Film.find({ 'genre': req.body.genreid }).exec()
+    ]);
+
+    if (genreFilms > 0) {
+      res.render('genre_delete', { page: 'Delete Genre', genre, genreFilms })
+    } else if (req.body.admin !== process.env.RUD_PW) {
+      res.render('genre_delete', { page: 'Delete Genre', genre, genreFilms, error: "Admin password must be correct for Write, Update or Delete operations" })
     } else {
       try {
         await Genre.findByIdAndRemove(req.body.genreid).exec();
@@ -124,6 +139,9 @@ exports.genre_update_post = [
     .isLength({ min: 1, max: 500 })
     .withMessage('Description must be between 1 and 500 characters')
     .escape(),
+  body('admin')
+    .custom(adminCheck)
+    .withMessage('Admin password must be correct for Write, Update or Delete operations'),
   async (req, res, next) => {
     const errors = validationResult(req);
     const updatedGenre = new Genre({

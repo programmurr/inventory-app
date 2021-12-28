@@ -7,6 +7,9 @@ var compression = require('compression');
 var helmet = require('helmet');
 require('dotenv').config();
 
+// TODO:
+// Implement password for RUD operations
+
 var indexRouter = require('./routes/index');
 
 var app = express();
