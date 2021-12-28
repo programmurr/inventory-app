@@ -10,6 +10,11 @@ block content
 
   form(action="", method="post") 
     .delete-film
+      label(for="admin") Admin password: 
+      input.admin-pw(type="password" name="admin" value="")
       input#filmid(type="hidden" name="filmid" required="true" value=film._id)
     
     button.delete-film-button(type="submit") Delete
+  
+  if error 
+    p.error= error

@@ -25,6 +25,13 @@ const imageValidation = (value, { req }) => {
   return true;
 }
 
+const adminCheck = (value, { req }) => {
+  if (req.body.admin !== process.env.RUD_PW) {
+    return false;
+  }
+  return true;
+}
+
 exports.film_create_get = async function(req, res, next) {
   try {
     const genres = await Genre.find().sort({ name: 1 }).exec();
@@ -60,6 +67,9 @@ exports.film_create_post = [
   check('image')
     .custom(imageValidation)
     .withMessage('Please only submit jpg, jpeg or png images less than 5MB.'),
+  body('admin')
+    .custom(adminCheck)
+    .withMessage('Admin password must be correct for Write, Update or Delete operations'),
   async (req, res, next) => {
     const { name, description, year, genre, price, quantity } = req.body;
     const errors = validationResult(req);
@@ -123,12 +133,17 @@ exports.film_delete_get = async function(req, res, next) {
 }
 
 exports.film_delete_post = async function(req, res, next) {
-  try {
-    await Film.findByIdAndRemove(req.body.filmid).exec();
-    res.redirect('/films');
-  } catch (error) {
-    debug('film delete/post error: ' + error);
-    return next(error);
+  if (req.body.admin === process.env.RUD_PW) {
+    try {
+      await Film.findByIdAndRemove(req.body.filmid).exec();
+      res.redirect('/films');
+    } catch (error) {
+      debug('film delete/post error: ' + error);
+      return next(error);
+    }
+  } else {
+    const film = await Film.findById(req.params.id).populate('genre').exec();
+    res.render('film_delete', { page: 'Delete Film', film, error: "Admin password must be correct for Write, Update or Delete operations" });
   }
 }
 
@@ -150,6 +165,7 @@ exports.film_update_get = async function(req, res, next) {
         }
       });
     });
+
     res.render('film_form', { title: 'Update Film', film, genres });
   } catch (error) {
     debug('film update/get error: ' + error);
@@ -183,6 +199,9 @@ exports.film_update_post = [
   check('image')
     .custom(imageValidation)
     .withMessage('Please only submit jpg, jpeg or png images less than 5MB.'),
+  body('admin')
+    .custom(adminCheck)
+    .withMessage('Admin password must be correct for Write, Update or Delete operations'),
   async (req, res, next) => {
     const { name, description, year, genre, price, quantity } = req.body;
     const errors = validationResult(req);

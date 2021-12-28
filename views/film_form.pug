@@ -5,9 +5,9 @@ block content
 
   form.film-submit(action="" method="post" enctype="multipart/form-data") 
     label(for="name") Name: 
-    input.film-name(type="text" name="name" placeholder="Goodfellas" value=(undefined===film ? "" : film.name))
+    input.film-name(type="text" name="name" placeholder="Goodfellas" value=(undefined===film ? "" : film.escapedName))
     label(for="description") Description: 
-    textarea.film-description(name="description" placeholder="This biographical crime film...") #{undefined===film ? "" : film.description}
+    textarea.film-description(name="description" placeholder="This biographical crime film...") #{undefined===film ? "" : film.escapedDescription}
     label(for="image") Upload a poster (optional): 
     input(type="file" name="image")
     label(for="year") Release year: 
@@ -20,7 +20,9 @@ block content
     div.genre-select 
       for genre in genres 
         input.film-genre(type="checkbox" name="genre" id=genre._id  value=genre._id checked=genre.checked)
-        label(for="genre._id") #{genre.name}
+        label(for="genre._id") #{genre.escapedName}
+    label(for="admin") Admin password: 
+      input.admin-pw(type="password" name="admin" value="")
     button(type="submit") Submit 
 
   .film-links 
