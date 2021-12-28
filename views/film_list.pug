@@ -3,15 +3,23 @@ extends layout
 block content 
   h1= page 
 
-  p Lookit the list of all the films below.
+  p Lookit the list of all the films below. Click the poster to see more!
 
   ul.film-list 
     each film in filmList 
       li.film-item 
-        img(src="", alt=film.name + " image")
-        a(href=film.url) #{film.name} 
+        if film.image.contentType === ""
+          a(href=film.url title=film.escapedName)
+            img.no-poster(src="/images/camera-outline.png" alt=film.escapedName + " poster not uploaded")
+          p No poster uploaded for 
+            a(href=film.url) #{film.escapedName}
+        else 
+          a(href=film.url title=film.escapedName)
+            img(src=film.poster, alt=film.escapedName + " image")
         p Price: #{film.pricePounds}
         p Quantity in stock: #{film.quantity}
+      .separator
+
     
     else 
       p There are no films

@@ -7,9 +7,6 @@ var compression = require('compression');
 var helmet = require('helmet');
 require('dotenv').config();
 
-// TODO: 
-// Decode HTML entities https://stackoverflow.com/a/34064434
-
 var indexRouter = require('./routes/index');
 
 var app = express();
